@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "7d75df77-3ff2-47e5-9cd0-00e9d0668ca8",
+		"name": "ABCP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20912266"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"let ordernumber = jsonData[0][\"internalNumber\"]\r",
+									"pm.collectionVariables.set(\"collection_order_number\", ordernumber);\r",
+									"\r",
+									"let userid = jsonData[0][\"userId\"]\r",
+									"pm.collectionVariables.set(\"collection_user_id\",userid)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host}}/cp/orders?userlogin={{adminlogin}}&userpsw={{adminpassword}}&dateCreatedStart=2023-01-09 00:00:00&dateCreatedEnd=2023-01-10 00:00:00&format=short",
+							"protocol": "https",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cp",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "userlogin",
+									"value": "{{adminlogin}}"
+								},
+								{
+									"key": "userpsw",
+									"value": "{{adminpassword}}"
+								},
+								{
+									"key": "dateCreatedStart",
+									"value": "2023-01-09 00:00:00"
+								},
+								{
+									"key": "dateCreatedEnd",
+									"value": "2023-01-10 00:00:00"
+								},
+								{
+									"key": "format",
+									"value": "short"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order detail information",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.get(\"collection_order_number\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"let positionid = jsonData[\"positions\"][0][\"id\"]\r",
+									"console.log(positionid)\r",
+									"pm.collectionVariables.set(\"collection_position_id\", positionid);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host}}/cp/order?userlogin={{adminlogin}}&userpsw={{adminpassword}}&internalNumber={{collection_order_number}}",
+							"protocol": "https",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cp",
+								"order"
+							],
+							"query": [
+								{
+									"key": "userlogin",
+									"value": "{{adminlogin}}"
+								},
+								{
+									"key": "userpsw",
+									"value": "{{adminpassword}}"
+								},
+								{
+									"key": "internalNumber",
+									"value": "{{collection_order_number}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order status history",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.get(\"collection_position_id\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host}}/cp/order/statusHistory?userlogin={{adminlogin}}&userpsw={{adminpassword}}&positionId={{collection_position_id}}",
+							"protocol": "https",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cp",
+								"order",
+								"statusHistory"
+							],
+							"query": [
+								{
+									"key": "userlogin",
+									"value": "{{adminlogin}}"
+								},
+								{
+									"key": "userpsw",
+									"value": "{{adminpassword}}"
+								},
+								{
+									"key": "positionId",
+									"value": "{{collection_position_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "user client balance",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.get(\"collection_user_id\")\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://{{host}}/cp/finance/userBalance?userlogin={{adminlogin}}&userpsw={{adminpassword}}&userId={{collection_user_id}}",
+							"protocol": "https",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cp",
+								"finance",
+								"userBalance"
+							],
+							"query": [
+								{
+									"key": "userlogin",
+									"value": "{{adminlogin}}"
+								},
+								{
+									"key": "userpsw",
+									"value": "{{adminpassword}}"
+								},
+								{
+									"key": "userId",
+									"value": "{{collection_user_id}}"
+								},
+								{
+									"key": "balance",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var jsonData = JSON.parse(responseBody);",
+					"console.log(jsonData)",
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "collection_order_number",
+			"value": ""
+		},
+		{
+			"key": "collection_position_id",
+			"value": ""
+		},
+		{
+			"key": "collection_user_id",
+			"value": ""
+		}
+	]
+}
